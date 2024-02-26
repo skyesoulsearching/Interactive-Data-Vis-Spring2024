@@ -1,20 +1,23 @@
 
-body {
-  font-family: "Source Sans Pro", sans-serif;
-  font-size: 16px;
-  padding: 1em;
-}
-
-h1 {
-  font-size: 3em;
-  margin: 0.25em 0;
-}
-
-h3 {
-  font-size: 2em;
-  margin: 0.25em 0;
-}
-
-p {
-  font-size: 1em;
-}
+    table {
+      font-family: 'Consolas';
+    
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #fda7a7;
+    }
+    .rank {
+      font-variant: small-caps slashed-zero;
+      color: brown; 
+    }
+    
+    rect {
+      fill: lightseagreen;
+    }
+  
