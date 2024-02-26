@@ -1,5 +1,5 @@
-
 <!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Interactive Data Visualization Tutorial</title>
@@ -7,9 +7,22 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <h1>Hello World!</h1>
-  <h3>Section 1 | Tutorial 3 | Intro to JS</h3>
-  <!-- add any HTML you might need here, like a button or a div -->
+  <h1>Counting all the Clicks!</h1>
+  
+  <div>
+    <p>Number of Clicks: <span id="clickCount">0</span></p>
+    <button id="clickButton">Pardon me, kindly click me~</button>
+  </div>
+
+  <h2>Various Inputs</h2>
+  <div>
+    <label for="nameInput">Name:</label>
+    <input type="text" id="nameInput">
+    <label for="ageInput">Age:</label>
+    <input type="number" id="ageInput">
+    <button id="submitInfoButton">Submit</button>
+  </div>
   <script src="main.js"></script>
 </body>
 </html>
+
