@@ -1,19 +1,31 @@
-body {
-  font-family: "Source Sans Pro", sans-serif;
-  font-size: 16px;
-  padding: 1em;
+
+
+body, html {
+  margin: 0;
+  padding: 0;
 }
 
-h1 {
-  font-size: 3em;
-  margin: 0.25em 0;
+
+#chart-container {
+  margin: 20px auto; 
 }
 
-h3 {
-  font-size: 2em;
-  margin: 0.25em 0;
+
+svg {
+  display: block;
+  background-color: #f5f5f5; 
 }
 
-p {
-  font-size: 1em;
+
+.axis .tick text {
+  font-size: 14px; 
+  font-weight: bold; 
+  fill: #333; 
+}
+
+
+.main-title {
+  font-size: 18px; 
+  font-weight: bold; 
+  fill: #1d8a38; 
 }
