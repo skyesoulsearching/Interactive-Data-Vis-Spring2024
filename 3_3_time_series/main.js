@@ -19,12 +19,7 @@ let state = {
 d3.csv('../data/temp.csv', d3.autoType)
   .then(raw_data => {
     console.log("data", raw_data);
-    // Check for NaN or undefined Temperature values
-    const invalidTemperature = raw_data.some(d => isNaN(d.Temperature) || typeof d.Temperature === 'undefined');
-    if (invalidTemperature) {
-      console.error('Invalid Temperature values in the data.');
-      return;
-    }
+
     // save our data to application state
     state.data = raw_data;
     init(); // Call init() inside the then() function
