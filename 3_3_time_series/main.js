@@ -3,7 +3,6 @@ const width = 800,
   height = 400,
   margin = { top: 30, right: 20, bottom: 30, left: 50 };
 
-// these variables allow us to access anything we manipulate in init() but need access to in draw().
 let svg;
 let xScale;
 let yScale;
@@ -11,24 +10,22 @@ let yScale;
 /* APPLICATION STATE */
 let state = {
   data: [],
-  selection: "All", // You can update this to reflect your filter selection if needed
+  selection: "All",
 };
 
-
 /* LOAD DATA */
-d3.csv('../data/temp.csv', d3.autoType)
-  .then(raw_data => {
+d3.csv('../data/temp.csv', d => ({
+  Date: new Date(d.Date),
+  Temperature: +d["Temperature (Fahrenheit)"]
+})).then(raw_data => {
     console.log("data", raw_data);
-
-    // save our data to application state
     state.data = raw_data;
-    init(); // Call init() inside the then() function
+    init();
   })
-  .catch(error => console.log(error)); // Error handling for data loading failure
+  .catch(error => console.log(error));
 
 /* INITIALIZING FUNCTION */
 function init() {
-  // SCALES
   xScale = d3.scaleTime()
     .domain(d3.extent(state.data, d => d.Date))
     .range([margin.left, width - margin.right]);
@@ -38,48 +35,44 @@ function init() {
     .nice()
     .range([height - margin.bottom, margin.top]);
 
-  // AXES
   const xAxis = d3.axisBottom(xScale)
-    .tickFormat(d3.timeFormat("%Y-%m-%d")); // Format the dates as desired
-
+    .tickFormat(d3.timeFormat("%Y-%m-%d"));
   const yAxis = d3.axisLeft(yScale);
 
-  // UI ELEMENT SETUP (if any)
-
-  // CREATE SVG ELEMENT
   svg = d3.select("#container").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-  // CALL AXES
   svg.append("g")
     .attr("class", "x-axis")
     .attr("transform", `translate(0,${height - margin.bottom})`)
     .call(xAxis);
 
-  // Create and call y-axis
   svg.append("g")
-    .attr("class", "y-axis")  // This class is used to select the y-axis for updating
-    .attr("transform", `translate(${margin.left},0)`)  // Move it to the appropriate position
+    .attr("class", "y-axis")
+    .attr("transform", `translate(${margin.left},0)`)
     .call(yAxis);
 
-  draw(); // calls the draw function
+  draw();
 }
-
 
 /* DRAW FUNCTION */
 function draw() {
-  // FILTER DATA BASED ON STATE (if any)
   const filteredData = state.data;
 
-  // UPDATE LINE GENERATOR FUNCTION
+  console.log("Filtered Data: ", filteredData);
+  filteredData.forEach(d => {
+    console.log(`Date: ${d.Date}, Temperature: ${d.Temperature}, x: ${xScale(d.Date)}, y: ${yScale(d.Temperature)}`);
+  });
+
   const line = d3.line()
     .x(d => xScale(d.Date))
     .y(d => yScale(d.Temperature));
 
-  // DRAW LINE
+  console.log("Line Path Data: ", line(filteredData));
+
   svg.selectAll(".line")
-    .data([filteredData]) // Bind data as an array for single line
+    .data([filteredData])
     .join("path")
     .attr("class", "line")
     .attr("fill", "none")
@@ -87,22 +80,21 @@ function draw() {
     .attr("stroke-width", 2)
     .attr("d", line);
 
-  // DRAW DOTS
   const dots = svg.selectAll(".dot")
-    .data(filteredData, d => d.Date); // Key function to properly identify data points
+    .data(filteredData, d => d.Date);
 
   dots.enter().append("circle")
     .attr("class", "dot")
     .attr("cx", d => xScale(d.Date))
     .attr("cy", d => yScale(d.Temperature))
-    .attr("r", 0) // Start with zero radius for enter transition
-    .style("fill", "steelblue") // Example color for the dots
-    .merge(dots) // Merge enter and update selections
+    .attr("r", 0)
+    .style("fill", "steelblue")
+    .merge(dots)
     .transition()
-    .duration(1000) // Transition duration
+    .duration(1000)
     .attr("cx", d => xScale(d.Date))
     .attr("cy", d => yScale(d.Temperature))
-    .attr("r", 5); // Final radius after transition
+    .attr("r", 5);
 
   dots.exit()
     .transition()
@@ -110,10 +102,6 @@ function draw() {
     .attr("r", 0)
     .remove();
 
-   // UPDATE Y-AXIS LABELS
-   svg.select(".y-axis")
-   .call(d3.axisLeft(yScale).ticks(5).tickSizeOuter(0)); // Adjust tick count as needed
+  svg.select(".y-axis")
+    .call(d3.axisLeft(yScale).ticks(5).tickSizeOuter(0));
 }
-
-
-
